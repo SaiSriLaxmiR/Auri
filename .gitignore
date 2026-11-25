@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+node_modules/
+dist/
+coverage/
+.DS_Store
+benchmark/results/simulated_results.jsonl
+benchmark/results/summary.json
+benchmark/results/REPORT.md
