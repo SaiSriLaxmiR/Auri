@@ -1,5 +1,8 @@
 # Auri
 
+> **Live Demo:** https://saisrilaxmir.github.io/Auri/  
+> **Source:** https://github.com/SaiSriLaxmiR/Auri
+
 **Voice AI Reliability & Observability Platform**
 
 Auri is a full-stack developer platform for testing and diagnosing voice AI systems across speech recognition, turn-taking, LLM response quality, latency, and cost. It is designed to help teams compare voice stacks, inspect conversation traces, and localize failures before shipping changes to production.
