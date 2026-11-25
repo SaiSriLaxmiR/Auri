@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Auri — Voice AI Reliability</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f2ec;color:#27251f}
+*{box-sizing:border-box}body{margin:0}.shell{min-height:100vh;display:grid;grid-template-columns:230px 1fr}
+aside{background:#24241f;color:#f8f3e8;padding:30px 18px;display:flex;flex-direction:column}.brand{display:flex;gap:12px;align-items:center;margin-bottom:34px}.logo{width:42px;height:42px;border-radius:50%;background:#f0c86a;color:#24241f;display:grid;place-items:center;font-weight:900;font-size:24px}.brand strong{font-size:18px}.brand small{display:block;color:#aaa59a;margin-top:2px}.nav{padding:12px 14px;border-radius:10px;color:#bbb6a9;margin-bottom:6px}.nav.active{background:#35352e;color:#fff}.status{margin-top:auto;font-size:12px;color:#aaa59a}main{padding:42px clamp(24px,4vw,56px) 64px}.eyebrow,.label{font-size:11px;letter-spacing:.13em;font-weight:850;color:#8b806d}h1{font-size:clamp(42px,5.5vw,74px);line-height:.95;letter-spacing:-.055em;margin:9px 0 16px;max-width:850px}header p{max-width:760px;color:#716b61;line-height:1.6}.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:28px}.panel,.metric,.card{background:#fffdf8;border:1px solid #e1dbcf;border-radius:18px;box-shadow:0 10px 30px rgba(57,50,38,.035)}.panel{padding:24px}.audio{padding:20px;background:#f5f1e8;border-radius:15px;margin:18px 0}.wave{height:70px;display:flex;align-items:center;justify-content:center;gap:4px}.wave i{display:block;width:4px;border-radius:8px;background:#b89a58}.btn{border:0;border-radius:11px;padding:12px 17px;font-weight:760;cursor:pointer;background:#26271f;color:#fff}.stack{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid #d9d2c6;border-radius:12px;margin:10px 0;background:#fff}.stack.sel{background:#fbf3dd;border-color:#c7a960}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 34px}.metric{padding:18px}.metric span{font-size:11px;color:#80796e}.metric strong{display:block;font-size:24px;margin:5px 0}.results{display:grid;gap:14px}.card{padding:20px}.row{display:flex;justify-content:space-between;gap:15px}.mini{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.mini div{background:#f7f4ed;border-radius:12px;padding:13px}.diag{background:#292a24;color:#f5f1e7;border-radius:13px;padding:15px}.diag strong{color:#f0c86a}.pill{font-size:11px;padding:6px 9px;border-radius:999px;background:#e4f0df;color:#43663e;font-weight:800}@media(max-width:900px){.shell{grid-template-columns:1fr}.shell aside{display:none}.grid{grid-template-columns:1fr}.metrics,.mini{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="brand"><div class="logo">a</div><div><strong>Auri</strong><small>Voice reliability</small></div></div>
+  <div class="nav active">Overview</div><div class="nav">Benchmarks</div><div class="nav">Traces</div><div class="nav">Stacks</div>
+  <div class="status">● Public demo mode</div>
+</aside>
+<main>
+<header><div class="eyebrow">VOICE AI RELIABILITY</div><h1>Hear what breaks before users do.</h1><p>Benchmark voice stacks, compare reliability metrics, and localize failures across speech recognition, turn detection, LLM reasoning, and tool execution.</p></header>
+<div class="grid">
+<section class="panel">
+<div class="label">01 · TEST CONVERSATION</div><h2>Add a voice sample</h2><p>This public demo uses Auri's deterministic browser benchmark. The repository also contains the AWS production execution path.</p>
+<div class="audio"><div class="wave" id="wave"></div><strong>demo-call.wav</strong></div>
+<button class="btn" id="run">Run benchmark</button>
+</section>
+<section class="panel">
+<div class="label">02 · VOICE STACKS</div><h2>Choose what to compare</h2>
+<div class="stack sel">Swift <small>WebRTC · Deepgram · GPT</small></div>
+<div class="stack sel">Clear <small>Silero · OpenAI · Bedrock</small></div>
+<div class="stack sel">Nova <small>AWS · Transcribe · Bedrock</small></div>
+</section>
+</div>
+<section class="metrics">
+<div class="metric"><span>Evaluation suite</span><strong>240</strong><small>conversation scenarios</small></div>
+<div class="metric"><span>Noise profiles</span><strong>3</strong><small>clean · cafe · street</small></div>
+<div class="metric"><span>Full benchmark</span><strong>2,160</strong><small>stack-condition evaluations</small></div>
+<div class="metric"><span>Reliability metrics</span><strong>8+</strong><small>WER · p50/p95 · success · cost</small></div>
+</section>
+<h2>Benchmark results</h2><div id="results" class="results"></div>
+</main></div>
+<script>
+const wave=document.getElementById('wave');for(let i=0;i<28;i++){const x=document.createElement('i');x.style.height=(16+(i*13)%42)+'px';wave.appendChild(x)}
+const stacks=[['Swift','Deepgram','GPT'],['Clear','OpenAI','Bedrock'],['Nova','AWS Transcribe','Bedrock']];
+function stable(s,l,h){let x=2166136261;for(let i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)}return l+((x>>>0)%(h-l+1))}
+function card(s,i){const acc=stable(s[0]+'a',84,99),lat=stable(s[0]+'l',480,1720),turn=stable(s[0]+'t',190,790),cost=(stable(s[0]+'c',9,38)/1000).toFixed(3);const stage=acc<88?'ASR':turn>650?'VAD':'NONE';return `<article class="card"><div class="row"><div><small>#${i+1}</small><h3>${s[0]}</h3><p>${s[1]} · ${s[2]}</p></div><span class="pill">Task passed</span></div><div class="mini"><div><small>Transcript</small><strong>${acc}%</strong></div><div><small>Response</small><strong>${lat} ms</strong></div><div><small>Turn end</small><strong>${turn} ms</strong></div><div><small>Cost</small><strong>$${cost}</strong></div></div><div class="diag"><small>AURI DIAGNOSTIC</small><br><strong>${stage}</strong><p>${stage==='NONE'?'No dominant reliability failure detected.':'Auri localized the dominant reliability bottleneck to '+stage+'.'}</p></div></article>`}
+document.getElementById('run').onclick=()=>{document.getElementById('results').innerHTML=stacks.map(card).join('')};
+document.getElementById('run').click();
+</script>
+</body></html>
